@@ -189,8 +189,8 @@ end
 function visulization_Q2_partb()
 
     num_nodes = 100
-    num_samples_array = (100,200,500,1000,2000,5000,10000,20000,50000)
-    # num_samples_array = (100,200)
+    # num_samples_array = (100,200,500,1000,2000,5000,10000,20000,50000)
+    num_samples_array = (1:1:5)
     means = []
     variances = []
     for N in num_samples_array

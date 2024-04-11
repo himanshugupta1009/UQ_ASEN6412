@@ -1,5 +1,6 @@
 include("utils.jl")
-
+using Plots
+using StaticArrays
 import Distributions as DT
 
 #=
@@ -66,7 +67,6 @@ function generate_Ys(num_samples,num_dimensions,rng=MersenneTwister(1))
 end
 
 
-
 function do_LHS_sampling(N,num_dimensions,num_nodes,rng = MersenneTwister(9))
     Ys = generate_Ys(N,num_dimensions,rng)
     u_samples = [generate_u_sample(num_nodes,Ys[i]) for i in 1:N]
@@ -89,10 +89,10 @@ function visulization_Q2_part1()
 
     num_nodes = 100
     num_dimensions = 2
-    # num_samples_array = (100,200,500,1000,2000,5000)
+    num_samples_array = (100,200,500,1000,2000,5000)
     # num_samples_array = (100,200,500,1000,2000,5000,10000,20000,50000)
     # num_samples_array = (100,200)
-    num_samples_array = (1:1:10)
+    # num_samples_array = (1:1:10)
     means = []
     variances = []
     seed = 13
@@ -141,3 +141,10 @@ function visulization_Q2_part1()
 
     return snapshot1,snapshot2
 end
+
+#=
+num_samples = 10
+num_nodes = 101
+Q2_part_1(num_samples,num_nodes,MersenneTwister(11))
+visulization_Q2_part1()
+=#

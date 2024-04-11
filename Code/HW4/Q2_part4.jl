@@ -12,11 +12,10 @@ Do Smolyak with CC
 
 function generate_u_sample_MC(num_nodes,rng=MersenneTwister(7))
 
-    D = 10
+    D = 2
     a = 0.5
-    l = 0.2
-    mean = 1.0
-    σ = 2
+    l = 2.0
+    σ = 1
     eigenpairs = generate_eigenpairs(D,a,l,σ)
     Y = randn(rng,D)
 
@@ -24,10 +23,8 @@ function generate_u_sample_MC(num_nodes,rng=MersenneTwister(7))
     slab_start = 0.0 #a
     slab_end = 1.0 #b
     boundary_condition_start = 0.0 #ua
-    bc_end_distribution = DT.Normal(0.0,0.1) # N(μ=0.0, σ=0.1)
-    boundary_condition_end = rand(rng,bc_end_distribution) #ub
-    G(x) = KLE(x,eigenpairs,Y,mean,a)
-    K(x) = exp(G(x)) #k
+    boundary_condition_end = 0.0 #ub
+    K(x) = calculate_K_xω(x,eigenpairs,Y) #k
     F(x) = forcing_function(x) #f
     node_points = range(slab_start,stop=slab_end,length=num_nodes) #x
 
@@ -57,7 +54,7 @@ function Q2_part4()
     num_nodes = 101
     x_index = 51 #index of x = 0.5
     #For MC and LHS
-    num_samples_array = collect(0:10:129) 
+    num_samples_array = collect(0:1:128) 
     num_samples_array[1] = 1
     push!(num_samples_array,129)
     #For TP-CC and Smolyak-CC
@@ -133,4 +130,62 @@ function visulization_Q2_part4()
     display(snapshot)
     return snapshot
 
+end
+
+#=
+Q2_part4()
+visulization_Q2_part4()
+=#
+
+
+function visulization_just_MC()
+
+    num_nodes = 101
+    # num_samples_array = (100,200,500,1000,2000,5000,10000,20000,50000)
+    num_samples_array = (1:1:5)
+    means = []
+    variances = []
+    for N in num_samples_array
+        u_samples,M,V = main_MC(N,num_nodes)
+        push!(means,M)
+        push!(variances,V)
+    end
+
+    snapshot1 = plot(size=(700,700), dpi=300,
+        # xticks=:0.1:1.0, yticks=0:0.2:3,
+        xlabel="Node i", ylabel="Mean of 'u' value for Node i ",
+        title="Plot for Mean of 'u' value across different nodes with \n varying number of samples" 
+    # axis=([], false),
+    # legend=:bottom,
+    # legend=false
+    # Distribution
+    # Density
+    )
+
+    for i in 1:length(num_samples_array)
+        M = means[i]
+        N = num_samples_array[i]
+        plot!(snapshot1,1:num_nodes,M,label="N = $N",linewidth=2)
+    end
+    display(snapshot1)
+
+    snapshot2 = plot(size=(700,700), dpi=300,
+    # xticks=:0.1:1.0, yticks=0:0.2:3,
+    xlabel="Node i", ylabel="Variance of 'u' value for Node i ",
+    title="Plot for Variance of 'u' value across different nodes with \n varying number of samples" 
+    # axis=([], false),
+    # legend=:bottom,
+    # legend=false
+    # Distribution
+    # Density
+    )
+
+    for i in 1:length(num_samples_array)
+        V = variances[i]
+        N = num_samples_array[i]
+        plot!(snapshot2,1:num_nodes,V,label="N = $N",linewidth=2)
+    end
+    display(snapshot2)
+
+    return snapshot1,snapshot2
 end

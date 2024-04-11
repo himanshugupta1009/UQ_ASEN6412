@@ -1,6 +1,7 @@
 include("spquad.jl")
 include("utils.jl")
 using StaticArrays
+using Plots
 
 
 function tensor_product_grid(one_d_points, one_d_weights, num_dimensions)
@@ -121,3 +122,12 @@ function visulization_Q2_part2()
     return snapshot1,snapshot2
 end
 
+#=
+d = 2 #num_dimensions
+num_nodes = 101
+l = 4  #N = 2^l + 1
+
+Q2_part2_mean(num_nodes,d,l)
+Q2_part2_mean_square(num_nodes,d,l)
+visulization_Q2_part2()
+=#

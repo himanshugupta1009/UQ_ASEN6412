@@ -3,7 +3,8 @@ By Counting the number of points on each axis, we can tell that there are 17 poi
 This means l=4 because the number of points on each axis is 2^l+1.
 So, we need to find 17 points in one dimension and take the tensor product of these points.
 =#
-
+include("spquad.jl")
+using Plots
 
 function Q1_part1()
 
@@ -46,3 +47,7 @@ function Q1_part1()
     display(snapshot)
     return snapshot
 end
+
+#=
+Q1_part1()
+=#

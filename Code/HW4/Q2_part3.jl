@@ -1,7 +1,7 @@
 include("spquad.jl")
 include("utils.jl")
 using StaticArrays
-
+using Plots
 
 
 function do_smolyak_sparse_grid_clenshaw_curtis(num_dimensions, l, f)
@@ -99,3 +99,13 @@ function visulization_Q2_part3()
     return snapshot1,snapshot2
 end
 
+
+#=
+d = 2 #num_dimensions
+num_nodes = 101
+l = 4  #N = 2^l + 1
+
+Q2_part3_mean(num_nodes,d,l)
+Q2_part3_mean_square(num_nodes,d,l)
+visulization_Q2_part3()
+=#

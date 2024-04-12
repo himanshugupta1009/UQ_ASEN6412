@@ -66,40 +66,53 @@ function Q2_part4()
 
     # MC
     means_MC = []
+    variance_MC = []
     seed = rand(UInt32)
     for N in num_samples_array
         rng = MersenneTwister(seed)
         u_samples,M,V = main_MC(N,num_nodes,rng)
         push!(means_MC,M[51])
+        push!(variance_MC,V[51])
     end
 
     #LHS
     means_LHS = []
+    variance_LHS = []
     seed = 13
     for N in num_samples_array
         rng = MersenneTwister(seed)
         u_samples,M,V = Q2_part_1(N,num_nodes,rng)
         push!(means_LHS,M[51])
+        push!(variance_LHS,V[51])
     end
 
     #Tensor Product
     means_TP = []
+    variance_TP = []
     d = num_dimensions
     for l in l_array
         M = Q2_part2_mean(num_nodes,d,l)
+        M_square = Q2_part2_mean_square(num_nodes,d,l) 
+        V = M_square .- compute_matrix_square(M)
         push!(means_TP,M[51])
+        push!(variance_TP,V[51])
     end
 
     #Smolyak
     means_SG = []
+    variance_SG = []
     d = num_dimensions
     for l in l_array
         M = Q2_part3_mean(num_nodes,d,l)
+        M_square = Q2_part3_mean_square(num_nodes,d,l) 
+        V = M_square .- compute_matrix_square(M)
         push!(means_SG,M[51])
+        push!(variance_SG,V[51])
     end
 
-    return means_MC,means_LHS,means_TP,means_SG,num_samples_array,
-                    num_samples_array_using_l
+    return means_MC,variance_MC,means_LHS,variance_LHS,
+            means_TP,variance_TP,means_SG,variance_SG,
+            num_samples_array,num_samples_array_using_l
 
 end
 
@@ -107,11 +120,12 @@ end
 function visulization_Q2_part4()
 
 
-    means_MC,means_LHS,means_TP,means_SG,num_samples_array,
-    num_samples_array_using_l = Q2_part4()
+    means_MC,variance_MC,means_LHS,variance_LHS,
+    means_TP,variance_TP,means_SG,variance_SG,
+    num_samples_array,num_samples_array_using_l = Q2_part4()
 
 
-    snapshot = plot(size=(700,700), dpi=300,
+    snapshot1 = plot(size=(700,700), dpi=300,
         # xticks=:0.1:1.0, yticks=0:0.2:3,
         xlabel="Number of Samples", ylabel="Mean of 'u' value at x=0.5",
         title="Plot for Mean of 'u' at x=0.5 across different methods with \n varying number of samples" 
@@ -122,13 +136,30 @@ function visulization_Q2_part4()
     # Density
     )
 
-    plot!(snapshot,num_samples_array,means_MC,label="Monte Carlo",linewidth=2)
-    plot!(snapshot,num_samples_array,means_MC,label="LHS",linewidth=2)
-    plot!(snapshot,num_samples_array_using_l,means_TP,label="Tensor Product",linewidth=2)
-    plot!(snapshot,num_samples_array_using_l,means_TP,label="Smolyak-CC",linewidth=2)
+    plot!(snapshot1,num_samples_array,means_MC,label="Monte Carlo",linewidth=2)
+    plot!(snapshot1,num_samples_array,means_LHS,label="LHS",linewidth=2)
+    plot!(snapshot1,num_samples_array_using_l,means_TP,label="Tensor Product",linewidth=2)
+    plot!(snapshot1,num_samples_array_using_l,means_SG,label="Smolyak-CC",linewidth=2)
+    display(snapshot1)
 
-    display(snapshot)
-    return snapshot
+    snapshot2 = plot(size=(700,700), dpi=300,
+        # xticks=:0.1:1.0, yticks=0:0.2:3,
+        xlabel="Number of Samples", ylabel="Variance of 'u' value at x=0.5",
+        title="Plot for Variance of 'u' at x=0.5 across different methods with \n varying number of samples" 
+    # axis=([], false),
+    # legend=:bottom,
+    # legend=false
+    # Distribution
+    # Density
+    )
+
+    plot!(snapshot2,num_samples_array,variance_MC,label="Monte Carlo",linewidth=2)
+    plot!(snapshot2,num_samples_array,variance_LHS,label="LHS",linewidth=2)
+    plot!(snapshot2,num_samples_array_using_l,variance_TP,label="Tensor Product",linewidth=2)
+    plot!(snapshot2,num_samples_array_using_l,variance_SG,label="Smolyak-CC",linewidth=2)
+    display(snapshot2)
+
+    return snapshot1,snapshot2
 
 end
 

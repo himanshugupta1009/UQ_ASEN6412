@@ -89,10 +89,10 @@ function visulization_Q2_part1()
 
     num_nodes = 100
     num_dimensions = 2
-    num_samples_array = (100,200,500,1000,2000,5000)
+    # num_samples_array = (100,200,500,1000,2000,5000)
     # num_samples_array = (100,200,500,1000,2000,5000,10000,20000,50000)
     # num_samples_array = (100,200)
-    # num_samples_array = (1:1:10)
+    num_samples_array = (1:1:20)
     means = []
     variances = []
     seed = 13
@@ -146,5 +146,5 @@ end
 num_samples = 10
 num_nodes = 101
 Q2_part_1(num_samples,num_nodes,MersenneTwister(11))
-visulization_Q2_part1()
+s1,s2 = visulization_Q2_part1()
 =#

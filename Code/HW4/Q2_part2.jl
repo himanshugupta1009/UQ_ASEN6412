@@ -129,5 +129,5 @@ l = 4  #N = 2^l + 1
 
 Q2_part2_mean(num_nodes,d,l)
 Q2_part2_mean_square(num_nodes,d,l)
-visulization_Q2_part2()
+s1,s2 = visulization_Q2_part2()
 =#

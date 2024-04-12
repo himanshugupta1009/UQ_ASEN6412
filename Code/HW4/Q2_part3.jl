@@ -44,8 +44,8 @@ function visulization_Q2_part3()
 
     num_nodes = 100
     d = 2 #num_dimensions
-    num_l = 4
-    l_array = SVector(0,2,4,5)
+    num_l = 6
+    l_array = SVector(0,1,2,3,4,5)
     num_samples_array = MVector{num_l,Int}([2^i+1 for i in l_array])
     num_samples_array[1] = 1
 
@@ -74,7 +74,7 @@ function visulization_Q2_part3()
     for i in 1:length(num_samples_array)
         M = means[i]
         N = num_samples_array[i]
-        plot!(snapshot1,1:num_nodes,M,label="N = $N",linewidth=2)
+        plot!(snapshot1,1:num_nodes,M,label="N = $N",linewidth=1)
     end
     display(snapshot1)
 
@@ -92,7 +92,7 @@ function visulization_Q2_part3()
     for i in 1:length(num_samples_array)
         V = variances[i]
         N = num_samples_array[i]
-        plot!(snapshot2,1:num_nodes,V,label="N = $N",linewidth=2)
+        plot!(snapshot2,1:num_nodes,V,label="N = $N",linewidth=1)
     end
     display(snapshot2)
 
@@ -107,5 +107,5 @@ l = 4  #N = 2^l + 1
 
 Q2_part3_mean(num_nodes,d,l)
 Q2_part3_mean_square(num_nodes,d,l)
-visulization_Q2_part3()
+s1,s2 = visulization_Q2_part3()
 =#
